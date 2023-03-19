@@ -8,9 +8,8 @@ import { accountAtom, enterQueueAtom } from "./_app";
 import { trpc } from "../utils/trpc";
 import { ethers } from "ethers";
 import { useEffect, useState } from "react";
-import Header from "../components/Header";
-import Main from "../components/Main";
-import Footer from "../components/Footer";
+import item from "@/assets/images/item.png";
+import logo from "@/assets/images/logo.png";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -58,39 +57,64 @@ export default function Home() {
   return (
     <>
       <Head>
-        <title>Operation Tailgate</title>
+        <title>Tailgate</title>
         <meta name="description" content="Hackathon Project" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      {/* <Header /> */}
-      <main className="bg-[#212121] justify-between flex-col items-center h-screen p-24 flex">
-        <h1 className="text-[#e8e8e8] text-4xl font-bold">
-          Operation Tailgate
-        </h1>
-        {!account ? (
-          <button
-            onClick={() => web3Handler()}
-            className="rounded p-2 text-[#e8e8e8] bg-[#51abe1]"
-          >
-            Connect
-          </button>
-        ) : (
-          <button
-            className="rounded p-2 text-[#e8e8e8] bg-[#51abe1]"
-            onClick={() => {
-              setEnterQueue(true);
-              router.push("/purchase");
-            }}
-          >
-            Purchase
-          </button>
-        )}
-        <button onClick={()=>{
-          router.push("/home")
-        }}>PRESS</button>
+      <main className="bg-[#1E1E23] justify-center items-center w-full flex-col h-screen flex">
+        <div className="absolute justify-between pr-5 top-0 flex sm:space-x-8 items-center bg-[#1E1E23] w-full">
+          <Image className="sm:max-w-[300px] max-w-[200px]" src={logo} alt="" />
+          <h1 className="font-bold sm:text-3xl text-xl text-white">Tailgate</h1>
+        </div>
+        <div className="flex-col w-full flex sm:flex-row sm:justify-between items-center justify-center max-w-[1100px] pt-20">
+          <div className="">
+            <Image
+              className="sm:max-w-[500px] max-w-[300px]"
+              src={item}
+              alt=""
+            />
+          </div>
+          <div className="sm:space-y-10 space-y-4 flex flex-col items-center sm:pr-20">
+            <div className="text-center">
+              <h1 className="font-bold text-6xl text-white">NFT Item #999</h1>
+              <p className="text-[#e0e0e0]">By Nftlabs</p>
+            </div>
+            <div>
+              <p className="text-[#e0e0e0]">Ask Price:</p>
+              <p className="text-white">99 ETH</p>
+            </div>
+            <p className="text-white">Buy this NFT it's awesome!</p>
+            <p className="p-2 border w-[120px] border-[#51abe1] rounded-lg text-[#e0e0e0]">
+              1000 Editions
+            </p>
+            {!account ? (
+              <button
+                onClick={() => web3Handler()}
+                className="rounded p-2 text-[#e8e8e8] bg-[#51abe1]"
+              >
+                Connect to Mint
+              </button>
+            ) : (
+              <button
+                className="rounded p-2 text-[#e8e8e8] bg-[#51abe1]"
+                onClick={() => {
+                  router.push("/purchase");
+                }}
+              >
+                Mint
+              </button>
+            )}
+          </div>
+        </div>
+        {/* <button
+          onClick={() => {
+            router.push("/home");
+          }}
+        >
+          PRESS
+        </button> */}
       </main>
-      {/* <Footer />   */}
     </>
   );
 }

@@ -13,34 +13,66 @@ import logo from "@/assets/images/logo.png";
 
 const Timer = () => {
   const [end, setEnd] = useAtom(endAtom);
+  const [account, setAccount] = useAtom(accountAtom);
+  const [minted, setMinted] = useState(false);
 
-  //   useEffect(() => {
-  //     const x: any = setInterval(() => {
-  //       if (end <= 0) return clearInterval(x);
-  //       setEnd((prev) => (prev = prev - 1));
-  //     }, 1000);
+  const mutation = trpc.removeUser.useMutation();
 
-  //     return () => clearInterval(x);
-  //   }, []);
+  const router = useRouter();
+
+  const mint = () => {
+    setMinted(true);
+    setInterval(() => {
+      mutation.mutate({ address: account });
+      setAccount("");
+      router.push("/");
+    }, 2000);
+  };
+
+  const leave = () => {
+    mutation.mutate({ address: account });
+    setAccount("");
+    router.push("/");
+  };
+
+  useEffect(() => {
+    const x: any = setInterval(() => {
+      if (end <= 0) return clearInterval(x);
+      setEnd((prev) => (prev = prev - 1));
+    }, 1000);
+
+    return () => clearInterval(x);
+  }, []);
+
+  if (minted)
+    return (
+      <div className="text-white flex flex-col z-20 justify-center backdrop-brightness-50 backdrop-blur p-2 absolute left-0 right-0 bottom-0 top-0 text-center">
+        <p className="text-white text-3xl font-bold">Congrats on the mint!</p>
+        <p className="text-[#e0e0e0]">Exiting queue...</p>
+      </div>
+    );
 
   return (
     <div className="text-white flex flex-col z-20 justify-center backdrop-brightness-50 backdrop-blur p-2 absolute left-0 right-0 bottom-0 top-0 text-center">
       <div className="space-y-8 flex flex-col items-center">
         <div>
-          <p className="text-5xl">You're in and ready to mint!</p>
-          <p className="text-sm pt-2 text-[#e0e0e0]">You better hurry...</p>
+          <p className="text-5xl">You're in & ready to mint!</p>
+          <p className=" pt-2 text-[#e0e0e0]">You better hurry...</p>
         </div>
         <div>
           <p className="font-bold text-2xl">
             {end <= 0 ? "Time up" : end + " s"}
           </p>
-          <p className="text-sm text-[#e0e0e0]">Remaining</p>
+          <p className=" text-[#e0e0e0]">Remaining</p>
         </div>
         <div className="flex flex-col space-y-4 items-center w-1/4">
-          <button className="p-2 shadow-xl px-6 sm:px-0 sm:w-[50%] rounded-lg bg-[#21ace6] text-white">
+          <button
+            onClick={() => mint()}
+            className="p-2 shadow-xl px-6 sm:px-0 sm:w-[50%] rounded-lg bg-[#21ace6] text-white"
+          >
             Mint
           </button>
-          <button>Leave</button>
+          <button onClick={() => leave()}>Leave</button>
         </div>
       </div>
     </div>
@@ -66,23 +98,17 @@ const Queue = () => {
     }
   });
 
-  //   const renderUsers = () => {
-  //     return query.data?.users.map((u) => (
-  //       <div key={u.id}>
-  //         <p className="text-white">{u.address}</p>
-  //       </div>
-  //     ));
-  //   };
-
   useEffect(() => {
-    // if (!account) router.push("/");
+    // if (!account) {
+    //   mutation.mutate({ address: account });
+    //   router.push("/");
+    // }
 
     const queryIndex = query.data?.users.findIndex(
       (u) => u.address === account
     );
     if (!queryIndex) return;
     setIndex(queryIndex);
-    // setWidth(100 + index + 50);
   }, [query]);
 
   return (
@@ -243,11 +269,8 @@ export default function purchase() {
       </div>
       <Content />
       <Queue />
-      {/* {account && index && index <= 3 && end > 0 && (
-        <button className="text-white">Mint</button>
-      )} */}
       <Chat />
-      {index && index <= 3 && <Timer />}
+      {index && index <= 4 && <Timer />}
     </div>
   );
 }
