@@ -21,6 +21,7 @@ export const appRouter = router({
       })
     )
     .mutation(async ({ input }) => {
+      // upsert
       const existingUser = await prisma.user.findFirst({
         where: { address: input.address },
       });
@@ -70,6 +71,10 @@ export const appRouter = router({
         },
       });
     }),
+  getMessages: procedure.query(async () => {
+    const messages = await prisma.message.findMany();
+    return { messages };
+  }),
 });
 
 export type AppRouter = typeof appRouter;

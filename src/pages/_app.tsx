@@ -12,7 +12,7 @@ export const endAtom = atom(100);
 store.set(enterQueueAtom, false);
 store.set(accountAtom, "");
 store.set(indexAtom, 999);
-store.set(endAtom, 10);
+store.set(endAtom, 200);
 
 const App: AppType = ({ Component, pageProps }) => {
   return (
