@@ -109,7 +109,7 @@ export default function Header() {
                   className="inline-flex items-center px-4 py-2 mt-2 font-medium text-white transition duration-500 ease-in-out transform rounded-lg text-md md:mt-0 md:ml-4 bg-stone-800"
                   href="/"
                 >
-                  <span className="justify-center">Let's chat</span>
+                  <span className="justify-center">{`Let's chat`}</span>
                   {/* <svg
                     className="w-3 h-3 fill-current text-gray-400 flex ml-2 -mr-1"
                     viewBox="0 0 12 12"
