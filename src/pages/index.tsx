@@ -89,7 +89,7 @@ export default function Home() {
               <p className="text-[#e0e0e0]">Ask Price:</p>
               <p className="text-white">99 ETH</p>
             </div>
-            <p className="text-white">Buy this NFT it's awesome!</p>
+            <p className="text-white">{`Buy this NFT it's awesome!`}</p>
             <p className="p-2 border w-[120px] border-[#51abe1] rounded-lg text-[#e0e0e0]">
               1000 Editions
             </p>

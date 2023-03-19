@@ -59,7 +59,7 @@ const Timer = () => {
     <div className="text-white flex flex-col z-20 justify-center backdrop-brightness-50 backdrop-blur p-2 absolute left-0 right-0 bottom-0 top-0 text-center">
       <div className="space-y-8 flex flex-col items-center">
         <div>
-          <p className="text-5xl">You're in & ready to mint!</p>
+          <p className="text-5xl">{`You're in & ready to mint!`}</p>
           <p className=" pt-2 text-[#e0e0e0]">You better hurry...</p>
         </div>
         <div>
