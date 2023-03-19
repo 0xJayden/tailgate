@@ -273,7 +273,7 @@ export default function purchase() {
       <Content />
       <Queue />
       <Chat />
-      {index && index <= 4 && <Timer />}
+      {index && index <= 3 && <Timer />}
     </div>
   );
 }

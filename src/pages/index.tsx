@@ -112,13 +112,6 @@ export default function Home() {
             )}
           </div>
         </div>
-        {/* <button
-          onClick={() => {
-            router.push("/home");
-          }}
-        >
-          PRESS
-        </button> */}
       </main>
     </>
   );
