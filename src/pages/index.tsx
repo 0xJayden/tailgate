@@ -8,6 +8,9 @@ import { accountAtom, enterQueueAtom } from "./_app";
 import { trpc } from "../utils/trpc";
 import { ethers } from "ethers";
 import { useEffect, useState } from "react";
+import Header from "../components/Header";
+import Main from "../components/Main";
+import Footer from "../components/Footer";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -60,6 +63,7 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
+      {/* <Header /> */}
       <main className="bg-[#212121] justify-between flex-col items-center h-screen p-24 flex">
         <h1 className="text-[#e8e8e8] text-4xl font-bold">
           Operation Tailgate
@@ -82,7 +86,11 @@ export default function Home() {
             Purchase
           </button>
         )}
+        <button onClick={()=>{
+          router.push("/home")
+        }}>PRESS</button>
       </main>
+      {/* <Footer />   */}
     </>
   );
 }
