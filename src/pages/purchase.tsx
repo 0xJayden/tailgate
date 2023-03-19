@@ -197,7 +197,7 @@ const Chat = () => {
               className="w-full text-white flex space-x-2 p-1 rounded"
               key={m.id}
             >
-              <p className="font-bold">{m.userAddress?.substring(0, 5)}...:</p>
+              <p className="font-bold">{m.userAddress?.substring(0, 8)}...:</p>
               <p>{m.message}</p>
             </div>
           ))}
