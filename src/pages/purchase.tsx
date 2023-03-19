@@ -1,28 +1,57 @@
 import { trpc } from "@/utils/trpc";
 import { useAtom } from "jotai";
+import Image from "next/image";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { accountAtom, endAtom, enterQueueAtom, indexAtom, store } from "./_app";
+import img1 from "@/assets/images/bruce-lee.jpg";
+import img2 from "@/assets/images/cash-cash.jpg";
+import img3 from "@/assets/images/de-lorean.jpg";
+import img4 from "@/assets/images/manny.jpg";
+import img5 from "@/assets/images/nft.png";
+import logo from "@/assets/images/logo.png";
 
 const Timer = () => {
   const [end, setEnd] = useAtom(endAtom);
 
-  useEffect(() => {
-    const x: any = setInterval(() => {
-      if (end <= 0) return clearInterval(x);
-      setEnd((prev) => (prev = prev - 1));
-    }, 1000);
+  //   useEffect(() => {
+  //     const x: any = setInterval(() => {
+  //       if (end <= 0) return clearInterval(x);
+  //       setEnd((prev) => (prev = prev - 1));
+  //     }, 1000);
 
-    return () => clearInterval(x);
-  }, []);
+  //     return () => clearInterval(x);
+  //   }, []);
 
-  return <div>{end <= 0 ? "Time up" : end}</div>;
+  return (
+    <div className="text-white flex flex-col justify-center backdrop-brightness-50 backdrop-blur p-2 absolute left-0 right-0 bottom-0 top-0 text-center">
+      <div className="space-y-8 flex flex-col items-center">
+        <div>
+          <p className="text-lg">You're in and ready to mint!</p>
+          <p className="text-sm pt-2 text-[#cccccc]">You better hurry...</p>
+        </div>
+        <div>
+          <p className="text-sm text-[#cccccc]">Time Remaining</p>
+          <p className="font-bold text-2xl">
+            {end <= 0 ? "Time up" : end + " s"}
+          </p>
+        </div>
+        <div className="flex flex-col space-y-4 w-1/4">
+          <button className="p-2 shadow-xl px-4 rounded-lg bg-[#114F69] text-white">
+            Mint
+          </button>
+          <button>Leave</button>
+        </div>
+      </div>
+    </div>
+  );
 };
 
 const Queue = () => {
   const [account, setAccount] = useAtom(accountAtom);
   const [index, setIndex] = useAtom(indexAtom);
   const [end, setEnd] = useAtom(endAtom);
+
   const query = trpc.getUsers.useQuery();
 
   const router = useRouter();
@@ -36,15 +65,17 @@ const Queue = () => {
     }
   });
 
-  const renderUsers = () => {
-    return query.data?.users.map((u) => (
-      <div key={u.id}>
-        <p className="text-white">{u.address}</p>
-      </div>
-    ));
-  };
+  //   const renderUsers = () => {
+  //     return query.data?.users.map((u) => (
+  //       <div key={u.id}>
+  //         <p className="text-white">{u.address}</p>
+  //       </div>
+  //     ));
+  //   };
 
   useEffect(() => {
+    // if (!account) router.push("/");
+
     const queryIndex = query.data?.users.findIndex(
       (u) => u.address === account
     );
@@ -53,22 +84,119 @@ const Queue = () => {
   }, [query]);
 
   return (
-    <div className=" absolute top-5 right-5 rounded-lg bg-[#333333] p-5">
-      <h1>Your Position: {index}/1000</h1>
-      <h1>Estimated Wait: {(index * 100) / 10} seconds</h1>
+    <div className=" absolute items-center justify-between flex bottom-5 sm:bottom-10 w-[95%] rounded-lg bg-[#114F69] p-2 sm:p-5">
+      <div className="sm:space-x-20 space-x-8 flex">
+        <div>
+          <h1 className="font-bold text-white sm:text-3xl">{index}/1000</h1>
+          <h1 className="text-[#cccccc] text-sm sm:text-base">Position</h1>
+        </div>
+        <div>
+          <h1 className="font-bold text-white sm:text-3xl">
+            {(index * 100) / 10} seconds
+          </h1>
+          <h1 className="text-[#cccccc] text-sm sm:text-base">
+            Estimated Wait
+          </h1>
+        </div>
+      </div>
+      <div>
+        <p className="text-[#cccccc] text-sm sm:text-base">Wallet: {account}</p>
+        <p className="text-[#cccccc] text-xs sm:text-base">
+          Powered by Tailgate
+        </p>
+      </div>
     </div>
   );
 };
 
 const Chat = () => {
+  const [account, setAccount] = useAtom(accountAtom);
+  const [message, setMessage] = useState("");
+
+  const mutation = trpc.sendMessage.useMutation();
+
+  const query = trpc.getMessages.useQuery(undefined, { refetchInterval: 2000 });
+
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  const send = () => {
+    if (message === "") return;
+
+    mutation.mutate({ message, address: account });
+    setMessage("");
+  };
+
+  useEffect(scrollToBottom, [query]);
+
   return (
-    <div className="absolute bottom-5 p-2 right-5">
-      <div className="w-[300px] h-[400px] flex justify-center relative rounded-lg bg-[#333333]">
-        <input
-          placeholder="What's up?"
-          className="p-2 absolute bottom-3  w-[90%] bg-transparent border border-[#414141] rounded-lg"
-        />
+    <>
+      <div className="absolute bottom-[100px] backdrop-brightness-[20%] sm:bottom-[150px] h-[300px] sm:h-[400px] pb-3 rounded-lg overflow-scroll right-5">
+        <div className="sm:w-[300px] w-[220px] p-2 space-y-[3px] flex flex-col justify-end pb-10 relative">
+          {query.data?.messages.map((m) => (
+            <div
+              className="w-full text-white flex space-x-2 p-1 rounded"
+              key={m.id}
+            >
+              <p className="font-bold">{m.userAddress?.substring(0, 5)}...:</p>
+              <p>{m.message}</p>
+            </div>
+          ))}
+          <div ref={messagesEndRef} />
+        </div>
       </div>
+      <input
+        onKeyDown={(e) => {
+          if (e.shiftKey && e.key === "Enter") return;
+
+          if (e.key === "Enter") {
+            e.preventDefault();
+            send();
+          }
+        }}
+        onChange={(e) => setMessage(e.target.value)}
+        value={message ? message : ""}
+        placeholder="What's up?"
+        className="p-2 fixed bottom-[110px] backdrop-blur sm:bottom-[158px] right-6 w-[208px] sm:w-[290px] bg-transparent border border-[#414141] rounded-full"
+      />
+    </>
+  );
+};
+
+const Content = () => {
+  const data = [
+    {
+      image: <Image className="h-full object-cover w-full" src={img1} alt="" />,
+      id: 1,
+    },
+    {
+      image: <Image className="h-full object-cover w-full" src={img2} alt="" />,
+      id: 2,
+    },
+    {
+      image: <Image className="h-full object-cover w-full" src={img3} alt="" />,
+      id: 3,
+    },
+    {
+      image: <Image className="h-full object-cover w-full" src={img4} alt="" />,
+      id: 4,
+    },
+    {
+      image: <Image className="h-full object-cover w-full" src={img5} alt="" />,
+      id: 5,
+    },
+  ];
+
+  return (
+    <div className="w-full pt-12 sm:pt-20 space-y-4">
+      {data.map((i) => (
+        <div key={i.id} className="h-[800px] w-auto rounded-lg overflow-hidden">
+          {i.image}
+        </div>
+      ))}
     </div>
   );
 };
@@ -76,20 +204,23 @@ const Chat = () => {
 export default function purchase() {
   const [end, setEnd] = useAtom(endAtom);
   const [index, setIndex] = useAtom(indexAtom);
+  const [account, setAccount] = useAtom(accountAtom);
 
   const router = useRouter();
 
   return (
-    <div className="bg-[#212121] justify-between flex-col items-center h-screen p-24 flex">
+    <div className="bg-[#1e1e22] overflow-scroll justify-between flex-col items-center h-screen p-5 flex">
+      <div className="absolute justify-between sm:justify-start pr-5 sm:pr-0 top-0 flex sm:space-x-8 items-center bg-[#1E1E23] w-full">
+        <Image className="sm:max-w-[300px] max-w-[200px]" src={logo} alt="" />
+        <h1 className="font-bold sm:text-3xl text-xl text-white">Tailgate</h1>
+      </div>
+      <Content />
       <Queue />
-      {/* {index && index <= 3 && <Timer />} */}
-      {index && index <= 3 && end > 0 && (
-        <button className="text-white">Buy</button>
-      )}
-      <button className="text-white" onClick={() => router.back()}>
-        Back
-      </button>
+      {/* {account && index && index <= 3 && end > 0 && (
+        <button className="text-white">Mint</button>
+      )} */}
       <Chat />
+      {/* {index && index <= 3 && <Timer />} */}
     </div>
   );
 }
