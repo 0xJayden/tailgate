@@ -2,6 +2,7 @@ import { accountAtom, enterQueueAtom } from "@/pages/_app";
 import { trpc } from "@/utils/trpc";
 import { ethers } from "ethers";
 import { useAtom } from "jotai";
+import Link from "next/link";
 import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 
@@ -51,7 +52,7 @@ export default function Header() {
     <div className="fixed top-0 w-full z-30 clearNav md:bg-opacity-90 transition duration-300 ease-in-out">
       <div className="flex flex-col max-w-6xl px-4 mx-auto md:items-center md:justify-between md:flex-row md:px-6 lg:px-8">
         <div className="flex flex-row items-center justify-between p-4">
-          <a
+          <Link
             href="/"
             className="text-lg font-semibold rounded-lg tracking-widest focus:outline-none focus:shadow-outline"
           >
@@ -62,7 +63,7 @@ export default function Header() {
                 className="block object-contain h-16"
               ></img>
             </div>
-          </a>
+          </Link>
           <button
             className="text-white cursor-pointer leading-none px-3 py-1 md:hidden outline-none focus:outline-none "
             type="button"
@@ -96,15 +97,15 @@ export default function Header() {
           <nav className="flex-col flex-grow ">
             <ul className="flex flex-grow justify-end flex-wrap items-center">
               <li>
-                <a
+                <Link
                   href="/"
                   className="font-medium text-gray-600 hover:text-gray-900 px-5 py-3 flex items-center transition duration-150 ease-in-out"
                 >
                   Install now
-                </a>
+                </Link>
               </li>
               <li>
-                <a
+                <Link
                   className="inline-flex items-center px-4 py-2 mt-2 font-medium text-white transition duration-500 ease-in-out transform rounded-lg text-md md:mt-0 md:ml-4 bg-stone-800"
                   href="/"
                 >
@@ -119,7 +120,7 @@ export default function Header() {
                       fillRule="nonzero"
                     />
                   </svg> */}
-                </a>
+                </Link>
               </li>
             </ul>
           </nav>
