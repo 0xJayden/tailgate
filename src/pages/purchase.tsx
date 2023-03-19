@@ -22,9 +22,12 @@ const Timer = () => {
 
   const mint = () => {
     setMinted(true);
-    setInterval(() => {
+    const x = setInterval(() => {
       mutation.mutate({ address: account });
       setAccount("");
+      setEnd(200);
+      setMinted(false);
+      clearInterval(x);
       router.push("/");
     }, 2000);
   };
@@ -99,10 +102,10 @@ const Queue = () => {
   });
 
   useEffect(() => {
-    // if (!account) {
-    //   mutation.mutate({ address: account });
-    //   router.push("/");
-    // }
+    if (!account) {
+      mutation.mutate({ address: account });
+      router.push("/");
+    }
 
     const queryIndex = query.data?.users.findIndex(
       (u) => u.address === account
