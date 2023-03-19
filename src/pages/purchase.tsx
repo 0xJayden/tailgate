@@ -24,20 +24,20 @@ const Timer = () => {
   //   }, []);
 
   return (
-    <div className="text-white flex flex-col justify-center backdrop-brightness-50 backdrop-blur p-2 absolute left-0 right-0 bottom-0 top-0 text-center">
+    <div className="text-white flex flex-col z-20 justify-center backdrop-brightness-50 backdrop-blur p-2 absolute left-0 right-0 bottom-0 top-0 text-center">
       <div className="space-y-8 flex flex-col items-center">
         <div>
-          <p className="text-lg">You're in and ready to mint!</p>
-          <p className="text-sm pt-2 text-[#cccccc]">You better hurry...</p>
+          <p className="text-5xl">You're in and ready to mint!</p>
+          <p className="text-sm pt-2 text-[#e0e0e0]">You better hurry...</p>
         </div>
         <div>
-          <p className="text-sm text-[#cccccc]">Time Remaining</p>
           <p className="font-bold text-2xl">
             {end <= 0 ? "Time up" : end + " s"}
           </p>
+          <p className="text-sm text-[#e0e0e0]">Remaining</p>
         </div>
-        <div className="flex flex-col space-y-4 w-1/4">
-          <button className="p-2 shadow-xl px-4 rounded-lg bg-[#114F69] text-white">
+        <div className="flex flex-col space-y-4 items-center w-1/4">
+          <button className="p-2 shadow-xl px-6 sm:px-0 sm:w-[50%] rounded-lg bg-[#21ace6] text-white">
             Mint
           </button>
           <button>Leave</button>
@@ -51,6 +51,7 @@ const Queue = () => {
   const [account, setAccount] = useAtom(accountAtom);
   const [index, setIndex] = useAtom(indexAtom);
   const [end, setEnd] = useAtom(endAtom);
+  const [width, setWidth] = useState(100);
 
   const query = trpc.getUsers.useQuery();
 
@@ -81,30 +82,56 @@ const Queue = () => {
     );
     if (!queryIndex) return;
     setIndex(queryIndex);
+    // setWidth(100 + index + 50);
   }, [query]);
 
   return (
-    <div className=" absolute items-center justify-between flex bottom-5 sm:bottom-10 w-[95%] rounded-lg bg-[#114F69] p-2 sm:p-5">
-      <div className="sm:space-x-20 space-x-8 flex">
+    <div className=" absolute items-center justify-between flex bottom-5 sm:bottom-10 w-[95%] rounded-lg bg-[#212121] p-2 sm:p-5">
+      <div className="sm:space-x-20 z-10 space-x-8 flex">
         <div>
-          <h1 className="font-bold text-white sm:text-3xl">{index}/1000</h1>
-          <h1 className="text-[#cccccc] text-sm sm:text-base">Position</h1>
+          <h1 className="font-bold text-center text-white sm:text-3xl">
+            {query.data?.users.findIndex((u) => u.address === account)}/1000
+          </h1>
+          <h1 className="text-[#e0e0e0] text-sm text-center tracking-wider sm:text-base">
+            POSITION
+          </h1>
         </div>
         <div>
-          <h1 className="font-bold text-white sm:text-3xl">
-            {(index * 100) / 10} seconds
+          <h1 className="font-bold text-center text-white sm:text-3xl">
+            {query.data &&
+              (query.data?.users.findIndex((u) => u.address === account) *
+                100) /
+                10}{" "}
+            s
           </h1>
-          <h1 className="text-[#cccccc] text-sm sm:text-base">
-            Estimated Wait
+          <h1 className="text-[#e0e0e0] text-center tracking-wider text-sm sm:text-base">
+            ESTIMATED WAIT
           </h1>
         </div>
       </div>
-      <div>
-        <p className="text-[#cccccc] text-sm sm:text-base">Wallet: {account}</p>
-        <p className="text-[#cccccc] text-xs sm:text-base">
-          Powered by Tailgate
+      <div className="z-10">
+        <p className="text-[#e0e0e0] hidden sm:inline text-sm sm:text-base">
+          Wallet: {account}
+        </p>
+        <p className="text-[#e0e0e0] sm:hidden text-sm sm:text-base">
+          Wallet: {account.substring(0, 6)}...
+        </p>
+        <p className="text-[#e0e0e0] text-end text-xs sm:text-base">
+          Powered by <span className="font-bold">Tailgate</span>
         </p>
       </div>
+      {width > 0 && (
+        <div
+          style={{
+            width:
+              query.data &&
+              (
+                100 - query.data?.users.findIndex((u) => u.address === account)
+              ).toString() + "%",
+          }}
+          className={`absolute bg-[#21ace6] opacity-90 top-0 bottom-0 left-0 rounded-lg`}
+        ></div>
+      )}
     </div>
   );
 };
@@ -134,8 +161,8 @@ const Chat = () => {
 
   return (
     <>
-      <div className="absolute bottom-[100px] backdrop-brightness-[20%] sm:bottom-[150px] h-[300px] sm:h-[400px] pb-3 rounded-lg overflow-scroll right-5">
-        <div className="sm:w-[300px] w-[220px] p-2 space-y-[3px] flex flex-col justify-end pb-10 relative">
+      <div className="absolute bottom-[90px] sm:w-[30%] sm:right-9 w-[95%] backdrop-brightness-[20%] sm:bottom-[150px] h-[300px] sm:h-[400px] pb-3 rounded-lg overflow-scroll">
+        <div className="sm:w-[300px] p-2 space-y-[3px] flex flex-col justify-end pb-10 relative">
           {query.data?.messages.map((m) => (
             <div
               className="w-full text-white flex space-x-2 p-1 rounded"
@@ -160,7 +187,7 @@ const Chat = () => {
         onChange={(e) => setMessage(e.target.value)}
         value={message ? message : ""}
         placeholder="What's up?"
-        className="p-2 fixed bottom-[110px] backdrop-blur sm:bottom-[158px] right-6 w-[208px] sm:w-[290px] bg-transparent border border-[#414141] rounded-full"
+        className="p-2 fixed outline-none text-white bottom-[100px] backdrop-blur sm:bottom-[158px] w-[92%] sm:w-[29%] bg-transparent sm:right-10 border border-[#414141] rounded-full"
       />
     </>
   );
@@ -210,7 +237,7 @@ export default function purchase() {
 
   return (
     <div className="bg-[#1e1e22] overflow-scroll justify-between flex-col items-center h-screen p-5 flex">
-      <div className="absolute justify-between sm:justify-start pr-5 sm:pr-0 top-0 flex sm:space-x-8 items-center bg-[#1E1E23] w-full">
+      <div className="absolute justify-between pr-5 top-0 flex sm:space-x-8 items-center bg-[#1E1E23] w-full">
         <Image className="sm:max-w-[300px] max-w-[200px]" src={logo} alt="" />
         <h1 className="font-bold sm:text-3xl text-xl text-white">Tailgate</h1>
       </div>
@@ -220,7 +247,7 @@ export default function purchase() {
         <button className="text-white">Mint</button>
       )} */}
       <Chat />
-      {/* {index && index <= 3 && <Timer />} */}
+      {index && index <= 3 && <Timer />}
     </div>
   );
 }
