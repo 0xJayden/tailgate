@@ -10,6 +10,7 @@ import { ethers } from "ethers";
 import { useEffect, useState } from "react";
 import item from "@/assets/images/item.png";
 import logo from "@/assets/images/logo.png";
+import tglogo from "@/assets/images/tailgatelogo.png";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -65,7 +66,11 @@ export default function Home() {
       <main className="bg-[#1E1E23] justify-center items-center w-full flex-col h-screen flex">
         <div className="absolute justify-between pr-5 top-0 flex sm:space-x-8 items-center bg-[#1E1E23] w-full">
           <Image className="sm:max-w-[300px] max-w-[200px]" src={logo} alt="" />
-          <h1 className="font-bold sm:text-3xl text-xl text-white">Tailgate</h1>
+          <Image
+            className="sm:max-w-[200px] max-w-[100px]"
+            src={tglogo}
+            alt=""
+          />
         </div>
         <div className="flex-col w-full flex sm:flex-row sm:justify-between items-center justify-center max-w-[1100px] pt-20">
           <div className="">

@@ -1,50 +1,15 @@
-import { accountAtom, enterQueueAtom } from "@/pages/_app";
-import { trpc } from "@/utils/trpc";
-import { ethers } from "ethers";
-import { useAtom } from "jotai";
+import Image from "next/image";
 import { useRouter } from "next/router";
-import React, { useEffect, useState } from "react";
+import mock from "@/assets/images/mock.png";
 
 export default function Main() {
-  const [navbarOpen, setNavbarOpen] = React.useState(false);
-  const [web3, setWeb3] = useState<ethers.providers.Web3Provider>();
-  const [account, setAccount] = useAtom(accountAtom);
-  const [enterQueue, setEnterQueue] = useAtom(enterQueueAtom);
   const router = useRouter();
-
-  const mutation = trpc.addUser.useMutation();
-
-  // const loadWeb3 = async () => {
-  //   const provider = new ethers.providers.Web3Provider(window.ethereum);
-  //   setWeb3(provider);
-
-  //   window.ethereum.on("accountsChanged", () => {
-  //     setAccount("");
-  //   });
-  // };
-
-  // const web3Handler = async () => {
-  //   try {
-  //     if (!web3) return;
-  //     const accounts = await web3.send("eth_requestAccounts", []);
-  //     console.log(accounts);
-  //     setAccount(accounts[0]);
-  //     mutation.mutate({ address: accounts[0] });
-  //     // setLoading(false);
-  //   } catch (err) {
-  //     console.log(err);
-  //     // setLoading(false);
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   loadWeb3();
-  // }, [account]);
 
   return (
     <section className="text-gray-600 body-font">
       <div className="max-w-7xl mx-auto flex px-5 py-24 md:flex-row flex-col items-center">
-        <div className="lg:flex-grow md:w-1/2 md:ml-24 pt-6 flex flex-col md:items-start md:text-left mb-40 items-center text-center">
+        <Image className="hidden sm:inline w-[30%] h-[30%]" src={mock} alt="" />
+        <div className="lg:flex-grow md:w-1/2 md:ml-24 pt-6 flex flex-col md:items-start md:text-left sm:mb-40 mb-10 items-center text-center">
           <h1 className="mb-5 sm:text-8xl text-5xl items-center Avenir xl:w-2/2 text-gray-900">
             {`Your customers`}
             <br></br>
@@ -54,11 +19,6 @@ export default function Main() {
             Tailgate helps NFT marketplaces put their customers and brand first
           </p>
           <div className="flex justify-center">
-            {/* <a
-              className="inline-flex items-center px-5 py-3 mt-2 font-medium text-white transition duration-500 ease-in-out transform bg-transparent border rounded-lg bg-gray-900"
-              href="https://github.com/r1/nine4-2/"
-            > Purchase
-            </a> */}
             <a
               className="inline-flex items-center px-4 py-2 mt-2 font-medium text-white transition duration-500 ease-in-out transform rounded-lg text-md md:mt-0 bg-gray-900"
               onClick={() => router.push("/")}
@@ -77,6 +37,7 @@ export default function Main() {
             </a>
           </div>
         </div>
+        <Image className="sm:hidden max-w-[300px]" src={mock} alt="" />
       </div>
       <section className="mx-auto">
         <div className="container px-5 mx-auto lg:px-24 ">
