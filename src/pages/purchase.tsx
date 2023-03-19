@@ -257,7 +257,7 @@ const Content = () => {
   );
 };
 
-export default function purchase() {
+export default function Purchase() {
   const [end, setEnd] = useAtom(endAtom);
   const [index, setIndex] = useAtom(indexAtom);
   const [account, setAccount] = useAtom(accountAtom);
