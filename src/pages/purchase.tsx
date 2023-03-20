@@ -88,7 +88,7 @@ const Queue = () => {
   const [end, setEnd] = useAtom(endAtom);
   const [width, setWidth] = useState(100);
 
-  const query = trpc.getUsers.useQuery();
+  const query = trpc.getUsers.useQuery(undefined, { refetchInterval: 2000 });
 
   const router = useRouter();
 
